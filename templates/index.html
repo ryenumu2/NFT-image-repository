@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            NFTs
+        </title>
+        <a href = "/reset"><button>Go back in time! (Reset DB) </button></a>
+    </head>
+
+    <body>
+
+        <table border="1">
+            <caption>My NFTs currently on the Market</caption>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Image</th>
+                <th scope="col">Price (ETH)</th>
+                <th scope="col">Quantity</th>
+            </tr>
+            {% for col in rows %}
+            <tr>
+                <td>
+                    {{ col[0] }}
+                </td>
+                <td>
+                    {{ col[1] }}
+                </td>
+                <td>
+                    <img alt='nft picture' src='/static/{{ col[2] }}'
+                         width='400'
+                         length='500'/>
+                </td>
+                <td>
+                    {{ col[3] }}
+                </td>
+                <td>
+                    {{ col[4] }}
+                </td> 
+                <td><a href = "/sell/{{col[0]}}"><button>Sell</button></a></td>
+                <td><a href = "/delete/{{col[0]}}"><button>Delete</button></a></td>
+                <td><a href = "/10discount/{{col[0]}}"><button>Add Discount: 10% off</button></a></td>
+                <td><a href = "/50discount/{{col[0]}}"><button>Add Discount: 50% off</button></a></td>
+                <td><a href = "{{ url_for('price_change', id_no = col[0]) }}"><button> Edit Price</button></a></td>
+                <td><a href = "{{ url_for('quant_change', id_no = col[0]) }}"><button> Edit Quantity</button></a></td>
+
+            </tr>
+            {% if 'edit_price' in request.url %}
+            
+            <form action = "price_change_confirm" method = "POST">
+            <p> Change Price of {{col[1]}} NFT to: <input class="form-control" type = "text" name = "price" value='{{col[3]}}'/> </p>
+            <p><input class="btn-primary" type = "submit" value = "Update Price" /></p>
+            <input type ="hidden" name = "id_no" value='{{col[0]}}' />
+            </form>
+            
+            {% endif %}
+
+            {% if 'edit_quantity' in request.url %}
+            
+            <form action = "quantity_change_confirm" method = "POST">
+            <p> Change Quantity of {{col[1]}} NFT to: <input class="form-control" type = "text" name = "qty" value='{{col[4]}}'/> </p>
+            <p><input class="btn-primary" type = "submit" value = "Update Quantity" /></p>
+            <input type ="hidden" name = "id_no" value='{{col[0]}}' />
+            </form>
+            
+            {% endif %}
+            {% endfor %}
+
+            
+
+        </table>
+    </body>
+</html>
